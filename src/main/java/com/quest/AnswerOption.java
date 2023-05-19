@@ -1,5 +1,7 @@
 package com.quest;
 
+import static java.util.Objects.isNull;
+
 public class AnswerOption {
     private final String description;
     private static int globalId = 1;
@@ -7,7 +9,11 @@ public class AnswerOption {
     private transient final boolean isTrueAnswer;
     private transient String failedMessage;
 
-    public AnswerOption(String description,boolean isTrueAnswer){
+    public AnswerOption(String description, boolean isTrueAnswer){
+        if (isNull(description)) {
+            throw new IllegalArgumentException("description cannot be null.");
+        }
+
         globalId++;
         this.id = globalId;
         this.description = description;
