@@ -23,11 +23,14 @@
         </div>
         <div class="survey-container__result-message"></div>
         <div class="survey-container__button">
-            <button id="start" class="button button_start" onclick="onGameStart()">Начать игру</button>
+            <c:if test="${progress != true}">
+                <button id="start" class="button button_start" onclick="onGameStart()">Начать игру</button>
+            </c:if>
             <button id="submit" class="button button_submit hide" onclick="onSubmit()">Ответить</button>
             <button id="reset" class="button button_reset hide" onclick="onReset()">Начать заново</button>
         </div>
     </div>
-    <div class="games-counter">Число игр: ${gamesCounter}</div>
+    <div class="games-counter">Число игр: <span class="games-counter__value">${gamesCounter}</span></div>
+    <div class="progress hide">${progress}</div>
 </body>
 </html>

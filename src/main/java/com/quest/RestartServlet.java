@@ -13,6 +13,8 @@ public class RestartServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         HttpSession currentSession = req.getSession(true);
 
+        currentSession.setAttribute("progress", false);
+
         int gamesCounter = (int) currentSession.getAttribute("gamesCounter");
         currentSession.setAttribute("gamesCounter", gamesCounter + 1);
 

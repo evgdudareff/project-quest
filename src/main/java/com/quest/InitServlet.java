@@ -15,16 +15,33 @@ public class InitServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession currentSession = req.getSession(true);
 
-        StepsConfig stepsConfig = new StepsConfig();
+        if (!hasGameSession(currentSession)) {
+            StepsConfig stepsConfig = new StepsConfig();
 
-        currentSession.setAttribute("stepsConfig", stepsConfig.getStepsConfig());
-        currentSession.setAttribute("currStepId", stepsConfig.getInitialStepId());
+            currentSession.setAttribute("stepsConfig", stepsConfig.getStepsConfig());
+            currentSession.setAttribute("currStepId", stepsConfig.getInitialStepId());
 
-        Object gamesCounter = currentSession.getAttribute("gamesCounter");
-        if (gamesCounter == null) {
-            currentSession.setAttribute("gamesCounter", 1);
+            Object gamesCounter = currentSession.getAttribute("gamesCounter");
+            if (gamesCounter == null) {
+                currentSession.setAttribute("gamesCounter", 1);
+            }
         }
 
         getServletContext().getRequestDispatcher("/index.jsp").forward(req, resp);
+    }
+
+    private boolean hasGameSession(HttpSession currentSession) {
+        if (currentSession == null) {
+            return false;
+        }
+
+        Object progressSession = currentSession.getAttribute("progress");
+        if (progressSession == null) {
+            return false;
+        }
+
+        boolean progress = (boolean) progressSession;
+        return progress;
+
     }
 }

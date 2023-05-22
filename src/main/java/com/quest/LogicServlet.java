@@ -16,7 +16,11 @@ import com.google.gson.GsonBuilder;
 public class LogicServlet extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws  IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        HttpSession currentSession = req.getSession(true);
+
+        currentSession.setAttribute("progress", true);
+
         Step currStep = getCurrStep(req);
 
         Question question = new Question(currStep.getDescription(), currStep.getOptions());
@@ -25,7 +29,7 @@ public class LogicServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws  IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String answerOptionId = req.getParameter("answerOptionId");
 
         HttpSession currentSession = req.getSession();
@@ -42,7 +46,8 @@ public class LogicServlet extends HttpServlet {
             if (nextStepId != 0) {
                 answerResult = new AnswerResult(true, nextStepId, null);
             } else {
-                answerResult = new AnswerResult(true, nextStepId, "Тебя вернули домой. Победа!");
+                String victoryMessage = "Тебя вернули домой. Победа!";
+                answerResult = new AnswerResult(true, nextStepId, victoryMessage);
             }
         } else {
             answerResult = new AnswerResult(false, 0, answerOption.getFailedMessage());
@@ -67,8 +72,6 @@ public class LogicServlet extends HttpServlet {
         HashMap<Integer, Step> stepsConfig = (HashMap<Integer, Step>) currentSession.getAttribute("stepsConfig");
         int currStepId = (Integer) currentSession.getAttribute("currStepId");
 
-        Step currStep = stepsConfig.get(currStepId);
-
-        return  currStep;
+        return stepsConfig.get(currStepId);
     }
 }
